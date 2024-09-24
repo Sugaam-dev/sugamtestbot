@@ -445,28 +445,42 @@
   <!-- end contact section -->
 
   <!-- chatbox -->
-<div id="body">
-  <div id="chat-circle" class="btn btn-raised">
-    <img src="images/chatbot.png" alt="chatbot" loading="lazy">
+  <div id="body"> 
+    <div id="chat-circle" class="btn btn-raised">
+      <img src="images/chatbot.png" alt="chatbot" loading="lazy">
+    </div>
+  
+    <div class="chat-box">
+      <div class="chat-box-header">
+        Sugaam Bot
+        <span class="chat-box-toggle" id="close-session"><i class="material-icons">close</i></span>
+      </div>
+      <div class="chat-box-body">
+        <div class="chat-box-overlay"></div>
+        <div class="chat-logs">
+          <!-- Bot message from pilot -->
+          <div class="chat-msg bot">
+            <div class="cm-msg-text">
+              Hello! How can I assist you today?
+            </div>
+          </div>
+          <!-- User message -->
+          <div class="chat-msg user">
+            <div class="cm-msg-text">
+              I need help with my account.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="chat-input">
+        <form>
+          <input type="text" id="chat-input" placeholder="Send a message..." />
+          <button type="submit" class="chat-submit" id="chat-submit"><i class="material-icons">send</i></button>
+        </form>
+      </div>
+    </div>
   </div>
-
-  <div class="chat-box">
-    <div class="chat-box-header">
-      ChatBot
-      <span class="chat-box-toggle" id="close-session"><i class="material-icons">close</i></span>
-    </div>
-    <div class="chat-box-body">
-      <div class="chat-box-overlay"></div>
-      <div class="chat-logs"></div>
-    </div>
-    <div class="chat-input">
-      <form>
-        <input type="text" id="chat-input" placeholder="Send a message..." />
-        <button type="submit" class="chat-submit" id="chat-submit"><i class="material-icons">send</i></button>
-      </form>
-    </div>
-  </div>
-</div>
+  
 <!-- chatbox ends -->
 
 
