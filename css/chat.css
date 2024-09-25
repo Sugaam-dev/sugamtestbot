@@ -153,7 +153,7 @@
   margin-bottom: 15px;
 }
 
-/* Adjusting the bot message to come from the pilot (left side) */
+/* Bot messages aligned to the left */
 .chat-msg.bot {
   display: flex;
   justify-content: flex-start;
@@ -171,22 +171,11 @@
   font-weight: 600;
 }
 
-.chat-msg.bot .msg-avatar img {
-  display: none; /* Hide bot avatar */
-}
-
-/* User message */
+/* User messages aligned to the right */
 .chat-msg.user {
   display: flex;
   justify-content: flex-end;
-}
-
-.chat-msg.user .msg-avatar img {
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  float: left;
-  margin-right: 10px;
+  margin-right: 18px; /* Aligning user messages to the right */
 }
 
 /* User message style */
@@ -201,7 +190,6 @@
 
 /* Message text styling */
 .cm-msg-text {
-  background: #24292e;
   padding: 10px 15px;
   color: #ae41f1;
   max-width: 75%;
