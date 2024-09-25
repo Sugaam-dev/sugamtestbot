@@ -131,7 +131,7 @@
   height: 300px;
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: #ae41f1 transparent;
+  scrollbar-color: #cf94f3 transparent;
 }
 
 /* Scrollbar styles */
@@ -144,7 +144,7 @@
 }
 
 .chat-logs::-webkit-scrollbar-thumb {
-  background-color: #ae41f1;
+  background-color: #cf94f3;
   border-radius: 10px;
 }
 
