@@ -70,6 +70,21 @@
   cursor: pointer;
 }
 
+/* Styling for tablets */
+@media (max-width: 768px) {
+  .chat-box-header .chat-box-toggle {
+    right: 10px; /* Adjust position for tablet screens */
+  }
+}
+
+/* Styling for mobile phones */
+@media (max-width: 480px) {
+  .chat-box-header .chat-box-toggle {
+    right: -10px; /* Adjust position for mobile screens */
+  }
+}
+
+
 .chat-box-header i {
   font-size: 24px;
   color: #e3d0eb; /* Close button in cockpit blue */
