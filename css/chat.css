@@ -79,7 +79,7 @@
 .chat-box-body {
   position: relative;  
   height: 280px;
-  overflow-y: auto;
+  overflow-y: hidden;
   background-image: url('https://www.shutterstock.com/image-vector/airplane-cockpit-view-panel-buttons-600nw-2331713117.jpg');
   color: white;
   background-size: cover; /* Ensure the image covers the window */
@@ -131,7 +131,7 @@
   height: 300px;
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: #ae41f1 #1a1a1a;
+  scrollbar-color: #ae41f1 transparent;
 }
 
 /* Scrollbar styles */
@@ -140,7 +140,7 @@
 }
 
 .chat-logs::-webkit-scrollbar-track {
-  background: #1a1a1a;
+  background: transparent;
 }
 
 .chat-logs::-webkit-scrollbar-thumb {
