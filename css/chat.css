@@ -105,7 +105,7 @@
   height: 50px;  
   padding: 10px;
   border: none;
-  color: #ae41f1;
+  color: #f1f1f1;
   border-top: 1px solid #555;
   outline: none;
   resize: none;
@@ -117,11 +117,11 @@
 
 .chat-submit {  
   position: absolute;
-  bottom: 7px;
+  bottom: 4px;
   right: 15px;
   background: transparent;
-  border: none;
-  color: #ae41f1;
+  border: #333;
+  color: #b151ed;
   font-size: 20px;
   cursor: pointer;
 }
@@ -180,7 +180,7 @@
 
 /* User message style */
 .chat-msg.user .cm-msg-text {
-  background: rgba(233, 106, 240, 0.7); /* User message background */
+  background: rgba(233, 106, 240, 0.6); /* User message background */
   color: #1a1a1a;
   padding: 10px 15px;
   border-radius: 10px;
