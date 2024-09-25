@@ -211,7 +211,7 @@
 
 /* User message style */
 .chat-msg.user .cm-msg-text {
-  background: rgba(233, 106, 240, 0.6); /* User message background */
+  background: rgba(233, 106, 240, 0.7); /* User message background */
   color: #1a1a1a;
   padding: 10px 15px;
   border-radius: 10px;
