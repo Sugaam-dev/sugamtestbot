@@ -108,8 +108,12 @@
 
   .chat-box-header{
     height: 50px;
-    font-size: 30px;
-    padding-top: 2px;
+    font-size: 24px;
+    padding-top: 3px;
+    
+  }
+  .chat-box-header i{
+    padding-top: 9px;
   }
 }
 
