@@ -101,6 +101,18 @@
   z-index: 1;
 }
 
+@media (max-width: 480px){
+  .chat-box-body {
+    height: 190px;
+  }
+
+  .chat-box-header{
+    height: 50px;
+    font-size: 30px;
+    padding-top: 2px;
+  }
+}
+
 /* Overlay for cockpit theme */
 .chat-box-overlay {
   background-image: url('images/cockpitImage.jpg');
