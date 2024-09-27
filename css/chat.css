@@ -52,7 +52,9 @@
   height: 70px;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px; 
-  color: #c342eb; /* Futuristic cockpit blue color */
+  color: #d98eef;
+  text-shadow: 0px 0px 10px rgb(255, 0, 17),
+              0px 0px 20px rgb(200, 0, 255);
   text-align: center;
   font-size: 32px;
   font-weight: 600;
