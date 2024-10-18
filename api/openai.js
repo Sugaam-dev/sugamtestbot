@@ -1,5 +1,36 @@
 const fetch = require('node-fetch');
 
+// List of FAQs and their answers
+const faqs = [
+  {
+    question: 'When was Sugaam established?',
+    answer: 'Sugaam was established in March 2024.'
+  },
+  {
+    question: 'What services does Sugaam offer?',
+    answer: 'Sugaam offers IT consulting, software services, AI services, process revamping, web & app design, e-commerce development, content management systems (CMS), search engine optimization (SEO), UI/UX design, mobile development, MLOps, machine learning, and cloud migration assessment.'
+  },
+  {
+    question: 'How can I contact Sugaam?',
+    answer: 'You can contact Sugaam via email at info@sugaam.in, or call +91-7722017100. Visit us at Ganga Trueno Business Park, Pune, Maharashtra 411014.'
+  }
+  // Add more FAQs as needed
+];
+
+// Function to check if the message matches any FAQ
+function findFaqMatch(message) {
+  // Convert the user message to lowercase for easier matching
+  const lowerCaseMessage = message.toLowerCase();
+
+  // Look for a partial match in the FAQs
+  for (let faq of faqs) {
+    if (lowerCaseMessage.includes(faq.question.toLowerCase())) {
+      return faq.answer;
+    }
+  }
+  return null; // No match found
+}
+
 module.exports = async (req, res) => {
   try {
     if (req.method !== 'POST') {
@@ -11,12 +42,18 @@ module.exports = async (req, res) => {
       return res.status(400).json({ message: 'Message is required' });
     }
 
+    // Check if the message matches any FAQ
+    const faqAnswer = findFaqMatch(message);
+    if (faqAnswer) {
+      return res.status(200).json({ choices: [{ message: { role: 'assistant', content: faqAnswer } }] });
+    }
+
+    // If no FAQ matches, send the message to OpenAI for a dynamic response
     const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
     if (!OPENAI_API_KEY) {
       return res.status(500).json({ message: 'OpenAI API key is not configured' });
     }
 
-    // Directly send the message to OpenAI to get a response
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
