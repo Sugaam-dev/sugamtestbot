@@ -1,4 +1,5 @@
 const fetch = require('node-fetch');
+
 module.exports = async (req, res) => {
   try {
     if (req.method !== 'POST') {
@@ -16,6 +17,37 @@ module.exports = async (req, res) => {
     }
 
     const contactInfo = 'You can contact us for more information at www.sugaam.in, email us at info@sugaam.in, or call +91 - 7722017100.';
+
+    const faqs = [
+      {
+        question: 'What services does Sugaam provide?',
+        answer: 'Sugaam offers a variety of IT consulting services, including software development, AI services, process revamping, UI/UX design, mobile app development (Android and iOS), machine learning solutions, cloud migration, cybersecurity, e-commerce development, CMS, SEO, and more.'
+      },
+      {
+        question: 'What is the internship program like at Sugaam?',
+        answer: 'Sugaam offers internships in web development, UI/UX design, Android and iOS development, AI software, digital marketing, and game development, designed to nurture talent and exceed industry standards.'
+      },
+      {
+        question: 'How can I apply for an internship or job at Sugaam?',
+        answer: 'You can explore internship and job opportunities on the Sugaam website under the Internship or Career pages, which outline available positions and requirements.'
+      },
+      {
+        question: 'What makes Sugaam different from other IT service providers?',
+        answer: 'Sugaam delivers customized IT solutions with a focus on efficiency and affordability for businesses. They emphasize long-term partnerships and tailor their services to meet unique business needs.'
+      },
+      {
+        question: 'Where is Sugaam located, and how can I contact them?',
+        answer: 'Sugaam is located at Ganga Trueno Business Park, Air Force Area, Pune, Maharashtra. You can contact them via email at info@sugaam.in or call +91-7722017100.'
+      },
+      {
+        question: 'What industries does Sugaam serve?',
+        answer: 'Sugaam serves various industries by providing cloud migration, cybersecurity, AI-driven automation, and process streamlining, among other IT consulting services.'
+      },
+      {
+        question: 'When was Sugaam established?',
+        answer: 'Sugaam was established in March 2024, with a focus on delivering tailored IT solutions for businesses.'
+      }
+    ];
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
