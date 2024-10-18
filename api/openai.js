@@ -22,19 +22,28 @@ module.exports = async (req, res) => {
     const faqs = [
       { question: 'What services does Sugaam provide?', answer: 'Sugaam offers a variety of IT consulting services, including software development, AI services, process revamping, UI/UX design, mobile app development (Android and iOS), machine learning solutions, cloud migration, cybersecurity, e-commerce development, CMS, SEO, and more.' },
       { question: 'What is the internship program like at Sugaam?', answer: 'Sugaam offers internships in web development, UI/UX design, Android and iOS development, AI software, digital marketing, and game development, designed to nurture talent and exceed industry standards.' },
-      { question: 'How can I apply for an internship or job at Sugaam?', answer: 'You can explore internship and job opportunities on the Sugaam website under the Internship or Career pages, which outline available positions and requirements.' },
-      { question: 'What makes Sugaam different from other IT service providers?', answer: 'Sugaam delivers customized IT solutions with a focus on efficiency and affordability for businesses. They emphasize long-term partnerships and tailor their services to meet unique business needs.' },
-      { question: 'Where is Sugaam located, and how can I contact them?', answer: 'Sugaam is located at Ganga Trueno Business Park, Air Force Area, Pune, Maharashtra. You can contact them via email at info@sugaam.in or call +91-7722017100.' },
-      { question: 'What industries does Sugaam serve?', answer: 'Sugaam serves various industries by providing cloud migration, cybersecurity, AI-driven automation, and process streamlining, among other IT consulting services.' },
-      { question: 'When was Sugaam established?', answer: 'Sugaam was established in March 2024, with a focus on delivering tailored IT solutions for businesses.' }
+      { question: 'How can I apply for an internship or job at Sugaam?', answer: 'You can explore internship and job opportunities on the Sugaam website under the Internship or Career pages.' },
+      { question: 'What makes Sugaam different from other IT service providers?', answer: 'Sugaam delivers customized IT solutions with a focus on efficiency and affordability for businesses.' },
+      { question: 'Where is Sugaam located, and how can I contact them?', answer: 'Sugaam is located at Ganga Trueno Business Park, Air Force Area, Pune, Maharashtra.' },
+      { question: 'What industries does Sugaam serve?', answer: 'Sugaam serves various industries by providing IT consulting services.' },
+      { question: 'When was Sugaam established?', answer: 'Sugaam was established in March 2024.' }
     ];
 
     // Check if the user's message matches any FAQ question
     const faqMatch = faqs.find(faq => message.toLowerCase().includes(faq.question.toLowerCase()));
     
     if (faqMatch) {
-      // If the user's question matches an FAQ, return the FAQ answer
-      return res.status(200).json({ message: faqMatch.answer });
+      // If the user's question matches an FAQ, return the FAQ answer in OpenAI-like format
+      return res.status(200).json({
+        choices: [
+          {
+            message: {
+              role: 'assistant',
+              content: faqMatch.answer
+            }
+          }
+        ]
+      });
     }
 
     // If no FAQ matches, proceed with OpenAI API
@@ -48,7 +57,7 @@ module.exports = async (req, res) => {
         model: 'gpt-3.5-turbo',
         messages: [
           { role: 'system', content: 'You are a helpful assistant.' },
-          { role: 'system', content: 'Welcome to SUGAAM, where we offer a synergy of efficiency and affordability to optimize your business operations. Our comprehensive services are designed to meet the diverse needs of modern businesses, including IT Consulting, Software Services, AI Services, Process Revamping, Web & App Design, E-Commerce Development, Content Management Systems (CMS), Search Engine Optimization (SEO), UI/UX Design, Mobile Development, MLOps, Machine Learning, and Cloud Migration Assessment. Contact us at www.sugaam.in, email us at info@sugaam.in, or call +91 - 7722017100. Visit us at Ganga Trueno Business Park, Air Force Area, New Airport Rd, Viman Nagar, Pune, Maharashtra 411014.' },
+          { role: 'system', content: 'Welcome to SUGAAM, where we offer a synergy of efficiency and affordability to optimize your business operations.' },
           { role: 'user', content: message }
         ],
         max_tokens: 150
