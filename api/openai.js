@@ -1,62 +1,34 @@
 const fetch = require('node-fetch');
 
-// Predefined FAQs and their embeddings
+// List of FAQs and their answers
 const faqs = [
   {
     question: 'When was Sugaam established?',
-    answer: 'Sugaam was established in March 2024.',
-    embedding: [] // Will store vector embeddings
+    answer: 'Sugaam was established in March 2024.'
   },
   {
     question: 'What services does Sugaam offer?',
-    answer: 'Sugaam offers IT consulting, software services, AI services, ...',
-    embedding: []
+    answer: 'Sugaam offers IT consulting, software services, AI services, process revamping, web & app design, e-commerce development, content management systems (CMS), search engine optimization (SEO), UI/UX design, mobile development, MLOps, machine learning, and cloud migration assessment.'
+  },
+  {
+    question: 'How can I contact Sugaam?',
+    answer: 'You can contact Sugaam via email at info@sugaam.in, or call +91-7722017100. Visit us at Ganga Trueno Business Park, Pune, Maharashtra 411014.'
   }
-  // Add more FAQs here
+  // Add more FAQs as needed
 ];
 
-// Function to generate embedding for a given text
-async function generateEmbedding(text) {
-  const response = await fetch('https://api.openai.com/v1/embeddings', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
-    },
-    body: JSON.stringify({
-      model: 'text-embedding-ada-002',
-      input: text
-    })
-  });
-  
-  const data = await response.json();
-  return data.data[0].embedding;
-}
+// Function to check if the message matches any FAQ
+function findFaqMatch(message) {
+  // Convert the user message to lowercase for easier matching
+  const lowerCaseMessage = message.toLowerCase();
 
-// Function to calculate cosine similarity between two vectors
-function cosineSimilarity(vecA, vecB) {
-  const dotProduct = vecA.reduce((sum, a, idx) => sum + a * vecB[idx], 0);
-  const magnitudeA = Math.sqrt(vecA.reduce((sum, a) => sum + a * a, 0));
-  const magnitudeB = Math.sqrt(vecB.reduce((sum, b) => sum + b * b, 0));
-  return dotProduct / (magnitudeA * magnitudeB);
-}
-
-// Function to find closest matching FAQ based on embedding similarity
-async function findClosestFAQ(userMessage) {
-  const userEmbedding = await generateEmbedding(userMessage);
-
-  let bestMatch = null;
-  let highestSimilarity = 0.7; // Set a threshold for matching
-
-  for (const faq of faqs) {
-    const similarity = cosineSimilarity(userEmbedding, faq.embedding);
-    if (similarity > highestSimilarity) {
-      bestMatch = faq;
-      highestSimilarity = similarity;
+  // Look for a partial match in the FAQs
+  for (let faq of faqs) {
+    if (lowerCaseMessage.includes(faq.question.toLowerCase())) {
+      return faq.answer;
     }
   }
-
-  return bestMatch ? bestMatch.answer : null;
+  return null; // No match found
 }
 
 module.exports = async (req, res) => {
@@ -70,13 +42,13 @@ module.exports = async (req, res) => {
       return res.status(400).json({ message: 'Message is required' });
     }
 
-    // Find a close match for the user query in the FAQ list
-    const faqAnswer = await findClosestFAQ(message);
+    // Check if the message matches any FAQ
+    const faqAnswer = findFaqMatch(message);
     if (faqAnswer) {
       return res.status(200).json({ choices: [{ message: { role: 'assistant', content: faqAnswer } }] });
     }
 
-    // If no FAQ match is found, send the message to OpenAI for a dynamic response
+    // If no FAQ matches, send the message to OpenAI for a dynamic response
     const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
     if (!OPENAI_API_KEY) {
       return res.status(500).json({ message: 'OpenAI API key is not configured' });
@@ -99,6 +71,8 @@ module.exports = async (req, res) => {
     });
 
     const data = await response.json();
+
+    // Ensure OpenAI returned a valid response
     if (!data.choices || !data.choices[0] || !data.choices[0].message || !data.choices[0].message.content) {
       throw new Error('Invalid response from OpenAI');
     }
