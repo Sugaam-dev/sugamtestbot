@@ -29,25 +29,53 @@ module.exports = async (req, res) => {
       { question: 'When was Sugaam established?', answer: 'Sugaam was established in March 2024.' }
     ];
 
-    // Check if the user's message matches any FAQ question
-    const faqMatch = faqs.find(faq => message.toLowerCase().includes(faq.question.toLowerCase()));
+    // Create a prompt to ask OpenAI if the user's message matches any FAQ
+    const faqPrompt = faqs.map((faq, index) => `${index + 1}. ${faq.question}`).join('\n');
     
-    if (faqMatch) {
-      // If the user's question matches an FAQ, return the FAQ answer in OpenAI-like format
+    const openAIPrompt = `
+      You are a helpful assistant. Below are some common questions (FAQs) asked to a company.
+      Your task is to determine if the user's question matches any of these FAQs, even if rephrased. If a match is found, respond with the number of the matching FAQ.
+      
+      FAQs:
+      ${faqPrompt}
+      
+      User question: "${message}"
+    `;
+
+    const response = await fetch('https://api.openai.com/v1/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${OPENAI_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: 'gpt-3.5-turbo',
+        prompt: openAIPrompt,
+        max_tokens: 10
+      })
+    });
+
+    const data = await response.json();
+    const matchText = data.choices[0]?.text?.trim();
+    
+    // Check if OpenAI returned a number corresponding to an FAQ
+    const faqIndex = parseInt(matchText) - 1;
+    if (!isNaN(faqIndex) && faqIndex >= 0 && faqIndex < faqs.length) {
+      // Respond with the matching FAQ answer
       return res.status(200).json({
         choices: [
           {
             message: {
               role: 'assistant',
-              content: faqMatch.answer
+              content: faqs[faqIndex].answer
             }
           }
         ]
       });
     }
 
-    // If no FAQ matches, proceed with OpenAI API
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    // If no match is found, use OpenAI for a general response
+    const generalResponse = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -64,35 +92,21 @@ module.exports = async (req, res) => {
       })
     });
 
-    if (!response.ok) {
-      throw new Error(`OpenAI API response was not ok: ${response.statusText}`);
-    }
+    const generalData = await generalResponse.json();
+    const generalMessage = generalData.choices[0]?.message?.content?.trim();
 
-    const data = await response.json();
+    // Return OpenAI's general response
+    return res.status(200).json({
+      choices: [
+        {
+          message: {
+            role: 'assistant',
+            content: generalMessage
+          }
+        }
+      ]
+    });
 
-    // Check if data.choices is valid
-    if (!data.choices || !data.choices[0] || !data.choices[0].message || !data.choices[0].message.content) {
-      throw new Error('Invalid response structure from OpenAI API');
-    }
-
-    // Check if the response from OpenAI contains phrases that indicate uncertainty
-    const uncertaintyPhrases = [
-      "I'm not sure",
-      "I don't know",
-      "I cannot be certain",
-      "I'm unsure",
-      "I don't have the information"
-    ];
-
-    const assistantMessage = data.choices[0].message.content.toLowerCase();
-    const isUncertain = uncertaintyPhrases.some(phrase => assistantMessage.includes(phrase));
-
-    if (isUncertain) {
-      return res.status(200).json({ message: contactInfo });
-    }
-
-    // If everything is fine, respond with the OpenAI's response
-    res.status(200).json(data);
   } catch (error) {
     console.error('Error sending message to OpenAI:', error);
     res.status(500).json({ error: 'Error sending message to OpenAI', details: error.message });
