@@ -27,7 +27,7 @@ function findFaqMatch(message) {
   // Initialize Fuse.js with options
   const options = {
     keys: ['question'],
-    threshold: 0.4, // Adjust to control fuzzy matching (lower is stricter, higher is more lenient)
+    threshold: 1.00, // Adjust to control fuzzy matching (lower is stricter, higher is more lenient)
     includeScore: true,
   };
 
