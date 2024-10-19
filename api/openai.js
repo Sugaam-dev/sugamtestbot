@@ -16,7 +16,7 @@ const faqs = [
     answer: 'Sugaam was started in March 2024.'
   },
   {
-    question: 'Who is the ceo of sugaam ?',question: 'Who is the head of sugaam ?',
+    question: 'Who is the ceo of sugaam ?',question: 'Who is the head of sugaam ?',question: 'Who is the director of sugaam ?',
     answer: 'The Joint Director of sugaam are Pratima Mishra and Rekha Ghosh.'
   }
   // Add more FAQs as needed
