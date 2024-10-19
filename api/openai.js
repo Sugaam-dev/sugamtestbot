@@ -1,4 +1,5 @@
 const fetch = require('node-fetch');
+const Fuse = require('fuse.js');
 
 // List of FAQs and their answers
 const faqs = [
@@ -17,18 +18,23 @@ const faqs = [
   // Add more FAQs as needed
 ];
 
-// Function to check if the message matches any FAQ
+// Function to find the best matching FAQ using fuzzy logic
 function findFaqMatch(message) {
-  // Convert the user message to lowercase for easier matching
-  const lowerCaseMessage = message.toLowerCase();
+  // Initialize Fuse.js with options
+  const options = {
+    keys: ['question'],
+    threshold: 0.4, // Adjust to control fuzzy matching (lower is stricter, higher is more lenient)
+    includeScore: true,
+  };
 
-  // Look for a partial match in the FAQs
-  for (let faq of faqs) {
-    if (lowerCaseMessage.includes(faq.question.toLowerCase())) {
-      return faq.answer;
-    }
+  const fuse = new Fuse(faqs, options);
+  const result = fuse.search(message);
+
+  // Return the best match if the score is within a reasonable range
+  if (result.length > 0 && result[0].score < 0.4) {
+    return result[0].item.answer;
   }
-  return null; // No match found
+  return null;
 }
 
 module.exports = async (req, res) => {
@@ -42,7 +48,7 @@ module.exports = async (req, res) => {
       return res.status(400).json({ message: 'Message is required' });
     }
 
-    // Check if the message matches any FAQ
+    // Check if the message matches any FAQ using fuzzy matching
     const faqAnswer = findFaqMatch(message);
     if (faqAnswer) {
       return res.status(200).json({ choices: [{ message: { role: 'assistant', content: faqAnswer } }] });
@@ -63,7 +69,7 @@ module.exports = async (req, res) => {
       body: JSON.stringify({
         model: 'gpt-3.5-turbo',
         messages: [
-          { role: 'system', content: 'You are a helpful assistant for Sugaam company.' },
+          { role: 'system', content: 'You are a helpful assistant for Sugaam company. If a question closely matches an FAQ, return the FAQ answer.' },
           { role: 'user', content: message }
         ],
         max_tokens: 150
@@ -77,7 +83,7 @@ module.exports = async (req, res) => {
       throw new Error('Invalid response from OpenAI');
     }
 
-    // Send the OpenAI's reply back to the user
+    // Send OpenAI's reply back to the user
     res.status(200).json({
       choices: [
         {
