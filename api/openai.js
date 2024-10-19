@@ -12,8 +12,12 @@ const faqs = [
     answer: 'Sugaam offers IT consulting, software services, AI services, process revamping, web & app design, e-commerce development, content management systems (CMS), search engine optimization (SEO), UI/UX design, mobile development, MLOps, machine learning, and cloud migration assessment.'
   },
   {
-    question: 'How can I contact Sugaam?',
-    answer: 'You can contact Sugaam via email at info@sugaam.in, or call +91-7722017100. Visit us at Ganga Trueno Business Park, Pune, Maharashtra 411014.'
+    question: 'When was Sugaam started?',
+    answer: 'Sugaam was started in March 2024.'
+  },
+  {
+    question: 'Who is the ceo of sugaam ?',question: 'Who is the head of sugaam ?',
+    answer: 'The Joint Director of sugaam are Pratima Mishra and Rekha Ghosh.'
   }
   // Add more FAQs as needed
 ];
