@@ -61,16 +61,18 @@ module.exports = async (req, res) => {
       return res.status(500).json({ message: 'OpenAI API key is not configured' });
     }
 
-    // Define the system message with the assigned role and instructions
+    // Define the system message with the assigned role, general knowledge, and instructions
     const systemMessage = {
       role: 'system',
-      content: `You are a Customer Service Executive at Sugaam, responsible for providing helpful and professional responses to users. 
+      content: `You are a 20-year-old Customer Service Executive at Sugaam, responsible for providing helpful and professional responses to users. 
+      You possess a broad general knowledge and social awareness typical of a 20-year-old. This includes understanding common topics like current technology trends, pop culture, basic academic knowledge, and general social interactions.
+      
       Answer questions based on the following FAQs:
       ${faqs.map(faq => faq.question + ": " + faq.answer).join("\n")}.
       
       If you encounter a negative or frustrated user response, remain calm and empathetic. If a question is beyond your knowledge, direct the user to contact Sugaam customer support at info@sugaam.in or +91-7722017100.
       
-      If the user message doesn't match an FAQ, generate an appropriate response based on your role and the services offered by Sugaam.`
+      If the user message doesn't match an FAQ, generate an appropriate response based on your role, your knowledge as a 20-year-old, and the services offered by Sugaam.`
     };
 
     // Sending user message and system message to OpenAI
