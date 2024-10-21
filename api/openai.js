@@ -12,20 +12,8 @@ const faqs = [
     answer: 'Sugaam offers IT consulting, software services, AI services, process revamping, web & app design, e-commerce development, content management systems (CMS), search engine optimization (SEO), UI/UX design, mobile development, MLOps, machine learning, and cloud migration assessment.'
   },
   {
-    question: 'When was Sugaam started?',
-    answer: 'Sugaam was started in March 2024.'
-  },
-  {
-    question: 'Who is ceo of sugaam ?',
-    answer: 'The Joint Director of sugaam are Pratima Mishra and Rekha Ghosh.'
-  },
-  {
-    question: 'Who is the director of sugaam ?',
-    answer:  'The Joint Director of sugaam are Pratima Mishra and Rekha Ghosh.'
-  },
-  {
-    question: 'Who is the head of sugaam ?',
-    answer:  'The Joint Director of sugaam are Pratima Mishra and Rekha Ghosh.'
+    question: 'How can I contact Sugaam?',
+    answer: 'You can contact Sugaam via email at info@sugaam.in, or call +91-7722017100. Visit us at Ganga Trueno Business Park, Pune, Maharashtra 411014.'
   }
   // Add more FAQs as needed
 ];
@@ -35,7 +23,7 @@ function findFaqMatch(message) {
   // Initialize Fuse.js with options
   const options = {
     keys: ['question'],
-    threshold: 1.00, // Adjust to control fuzzy matching (lower is stricter, higher is more lenient)
+    threshold: 0.4, // Adjust to control fuzzy matching (lower is stricter, higher is more lenient)
     includeScore: true,
   };
 
@@ -81,7 +69,7 @@ module.exports = async (req, res) => {
       body: JSON.stringify({
         model: 'gpt-3.5-turbo',
         messages: [
-          { role: 'system', content: 'You are a helpful assistant for Sugaam company. If a question closely matches an FAQ, return the FAQ answer.' },
+          { role: 'system', content: `You are a helpful assistant for Sugaam company. Here are the FAQs: ${faqs.map(faq => faq.question + ": " + faq.answer).join("\n")}. If the user message matches or is similar to any FAQ, respond with the correct answer. Otherwise, generate an appropriate response.` },
           { role: 'user', content: message }
         ],
         max_tokens: 150
