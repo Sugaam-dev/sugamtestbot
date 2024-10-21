@@ -24,17 +24,15 @@ const faqs = [
 
 // Function to find the best matching FAQ using fuzzy logic
 function findFaqMatch(message) {
-  // Initialize Fuse.js with options
   const options = {
     keys: ['question'],
-    threshold: 0.4, // Adjust to control fuzzy matching (lower is stricter, higher is more lenient)
+    threshold: 0.4, // Fuzzy match threshold
     includeScore: true,
   };
 
   const fuse = new Fuse(faqs, options);
   const result = fuse.search(message);
 
-  // Return the best match if the score is within a reasonable range
   if (result.length > 0 && result[0].score < 0.4) {
     return result[0].item.answer;
   }
@@ -58,12 +56,24 @@ module.exports = async (req, res) => {
       return res.status(200).json({ choices: [{ message: { role: 'assistant', content: faqAnswer } }] });
     }
 
-    // If no FAQ matches, send the message to OpenAI for a dynamic response
     const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
     if (!OPENAI_API_KEY) {
       return res.status(500).json({ message: 'OpenAI API key is not configured' });
     }
 
+    // Define the system message with the assigned role and instructions
+    const systemMessage = {
+      role: 'system',
+      content: `You are a Customer Service Executive at Sugaam, responsible for providing helpful and professional responses to users. 
+      Answer questions based on the following FAQs:
+      ${faqs.map(faq => faq.question + ": " + faq.answer).join("\n")}.
+      
+      If you encounter a negative or frustrated user response, remain calm and empathetic. If a question is beyond your knowledge, direct the user to contact Sugaam customer support at info@sugaam.in or +91-7722017100.
+      
+      If the user message doesn't match an FAQ, generate an appropriate response based on your role and the services offered by Sugaam.`
+    };
+
+    // Sending user message and system message to OpenAI
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -73,7 +83,7 @@ module.exports = async (req, res) => {
       body: JSON.stringify({
         model: 'gpt-3.5-turbo',
         messages: [
-          { role: 'system', content: `You are a helpful assistant for Sugaam company. Here are the FAQs: ${faqs.map(faq => faq.question + ": " + faq.answer).join("\n")}. If the user message matches or is similar to any FAQ, respond with the correct answer. Otherwise, generate an appropriate response.` },
+          systemMessage,
           { role: 'user', content: message }
         ],
         max_tokens: 150
