@@ -106,6 +106,7 @@
 @media (max-width: 480px){
   .chat-box-body {
     height: 190px;
+    overflow-y: auto;
   }
 
   .chat-box-header{
