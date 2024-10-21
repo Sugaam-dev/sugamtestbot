@@ -11,7 +11,7 @@
 /* Chatbot circle button */
 #chat-circle {
   position: fixed;
-  bottom: 50px;
+  bottom: 25px;
   right: 10px;
   width: 80px;
   height: 80px;  
