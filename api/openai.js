@@ -14,6 +14,10 @@ const faqs = [
   {
     question: 'How can I contact Sugaam?',
     answer: 'You can contact Sugaam via email at info@sugaam.in, or call +91-7722017100. Visit us at Ganga Trueno Business Park, Pune, Maharashtra 411014.'
+  },
+  {
+    question: 'Who is the ceo of sugaam?',
+    answer: 'The joint director of sugaam is Pratima Mishra and Rekha Ghosh.'
   }
   // Add more FAQs as needed
 ];
